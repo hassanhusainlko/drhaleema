@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+
+{% block title %}About — Dr. Haleema Tul Husna{% endblock %}
+
+{% block content %}
+
+<!-- Page hero -->
+<section class="hero" style="padding:3.5rem 1.5rem;">
+    <div class="container">
+        <div class="hero-badge">About the Doctor</div>
+        <h1>Dr. Haleema Tul Husna</h1>
+        <p class="hero-qualification">Consultant Unani Physician · BUMS</p>
+        <p class="hero-tagline">Chronic Disease Management &nbsp;|&nbsp; Women's Health &nbsp;|&nbsp; Holistic Wellness</p>
+    </div>
+</section>
+
+<!-- Professional Overview -->
+<section class="section">
+    <div class="container">
+        <div class="about-overview-grid">
+
+            <!-- Credential card -->
+            <div class="card">
+                <div class="card-header">Qualifications &amp; Credentials</div>
+                <div class="card-body">
+                    <ul class="about-cred-list">
+                        <li class="about-cred-item">
+                            <span class="about-cred-icon">🎓</span>
+                            <div>
+                                <span class="about-cred-title">BUMS</span>
+                                <p class="about-cred-sub">Bachelor of Unani Medicine &amp; Surgery</p>
+                            </div>
+                        </li>
+                        <li class="about-cred-item">
+                            <span class="about-cred-icon">🏥</span>
+                            <div>
+                                <span class="about-cred-title">Consultant Unani Physician</span>
+                                <p class="about-cred-sub">Registered practitioner of traditional Unani medicine</p>
+                            </div>
+                        </li>
+                        <li class="about-cred-item">
+                            <span class="about-cred-icon">🌿</span>
+                            <div>
+                                <span class="about-cred-title">Holistic &amp; Natural Medicine</span>
+                                <p class="about-cred-sub">Specialised in herbal and natural therapeutic interventions</p>
+                            </div>
+                        </li>
+                        <li class="about-cred-item">
+                            <span class="about-cred-icon">♀️</span>
+                            <div>
+                                <span class="about-cred-title">Women's Health Specialist</span>
+                                <p class="about-cred-sub">Extensive experience in gynaecological and reproductive health</p>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <hr style="border:none;border-top:1px solid var(--border);margin:1.2rem 0;">
+
+                    <a href="{% url 'clinic:expertise' %}" class="btn btn-primary btn-block">View Expertise &amp; Specialisations</a>
+                    <a href="{% url 'clinic:book_guest' %}" class="btn btn-gold btn-block" style="margin-top:0.6rem;">Book an Appointment</a>
+                </div>
+            </div>
+
+            <!-- Bio -->
+            <div class="about-bio">
+                <h2 class="section-title">Professional Overview</h2>
+                <p class="section-subtitle">Integrating traditional healing with a patient-centric approach</p>
+
+                <p>Dr. Haleema Tul Husna is a dedicated Unani physician specialising in the holistic management of
+                    chronic and lifestyle-related conditions. With a BUMS qualification, she integrates traditional
+                    healing principles with a patient-centric approach to address the root causes of illness rather
+                    than merely suppressing symptoms.</p>
+
+                <p>She is particularly skilled in treating complex metabolic, respiratory, and musculoskeletal
+                    disorders through natural therapeutic interventions — drawing on centuries of Unani medical
+                    knowledge combined with a deep understanding of the individual patient's constitution and
+                    lifestyle.</p>
+
+                <p>Dr. Haleema's practice places equal emphasis on Women's Health, offering confidential and
+                    compassionate care for hormonal imbalances, reproductive concerns, and related conditions.
+                    Every patient receives a personalised treatment plan rooted in the Unani tradition of
+                    restoring balance and vitality from within.</p>
+
+                <!-- What is Unani -->
+                <div class="about-callout">
+                    <h4>What is Unani Medicine?</h4>
+                    <p>Unani (Greco-Arabic) medicine is a traditional system of healing with roots in the works of
+                        Hippocrates and Galen, refined over centuries in the Islamic world. It is built on the
+                        concept of four humours and uses natural remedies — including herbs, dietary regulation,
+                        and lifestyle adjustments — to restore the body's natural balance and strengthen its
+                        innate healing capacity.</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- Approach section -->
+<section class="section section-alt">
+    <div class="container">
+        <h2 class="section-title" style="text-align:center">Our Approach to Care</h2>
+        <p class="section-subtitle" style="text-align:center">Rooted in tradition, guided by compassion</p>
+        <div class="steps-grid">
+            <div class="step">
+                <div class="step-num" style="background:var(--gold); color:var(--text);">🔍</div>
+                <h4>Root Cause Diagnosis</h4>
+                <p>In-depth consultation to identify underlying causes, not just surface symptoms</p>
+            </div>
+            <div class="step">
+                <div class="step-num" style="background:var(--gold); color:var(--text);">🌿</div>
+                <h4>Natural Therapeutics</h4>
+                <p>Herbal formulations and natural remedies tailored to the individual constitution</p>
+            </div>
+            <div class="step">
+                <div class="step-num" style="background:var(--gold); color:var(--text);">🥗</div>
+                <h4>Lifestyle &amp; Dietary Guidance</h4>
+                <p>Personalised diet and lifestyle recommendations as a core part of treatment</p>
+            </div>
+            <div class="step">
+                <div class="step-num" style="background:var(--gold); color:var(--text);">🔄</div>
+                <h4>Long-term Wellness</h4>
+                <p>Follow-up care and ongoing support to maintain balance and prevent relapse</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="section section-teal">
+    <div class="container" style="text-align:center;">
+        <h2 class="section-title">Ready to Begin Your Healing Journey?</h2>
+        <p class="section-subtitle">Book a consultation — Clinic Visit or On-Call — at a time that suits you.</p>
+        <div style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; margin-top:1rem;">
+            <a href="{% url 'clinic:book_guest' %}" class="btn btn-gold btn-lg">Book Appointment</a>
+            <a href="{% url 'clinic:expertise' %}" class="btn btn-outline-white btn-lg">Explore Expertise</a>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

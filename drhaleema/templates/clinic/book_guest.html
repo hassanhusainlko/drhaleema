@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% block title %}Book Appointment (Guest) — Dr. Haleema Tul Husna{% endblock %}
+
+{% block content %}
+<div class="form-page">
+    <div class="container-sm">
+        <div class="form-card">
+            <h1 class="form-title">Book an Appointment</h1>
+            <p class="form-subtitle">
+                No account needed. Fill in your details below.
+                {% if not user.is_authenticated %}
+                Already have an account? <a href="{% url 'accounts:login' %}">Login to book</a>.
+                {% endif %}
+            </p>
+
+            <form method="post" novalidate>
+                {% csrf_token %}
+
+                <!-- Guest details -->
+                <div class="form-group">
+                    <label for="{{ form.guest_name.id_for_label }}">{{ form.guest_name.label }}</label>
+                    <input type="text" name="guest_name" id="{{ form.guest_name.id_for_label }}"
+                           class="form-control{% if form.guest_name.errors %} error{% endif %}"
+                           value="{{ form.guest_name.value|default:'' }}" placeholder="Your full name">
+                    {% for e in form.guest_name.errors %}<span class="field-error">{{ e }}</span>{% endfor %}
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.guest_phone.id_for_label }}">{{ form.guest_phone.label }}</label>
+                    <input type="tel" name="guest_phone" id="{{ form.guest_phone.id_for_label }}"
+                           class="form-control{% if form.guest_phone.errors %} error{% endif %}"
+                           value="{{ form.guest_phone.value|default:'' }}" placeholder="+92 300 0000000">
+                    {% for e in form.guest_phone.errors %}<span class="field-error">{{ e }}</span>{% endfor %}
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.guest_email.id_for_label }}">{{ form.guest_email.label }}</label>
+                    <input type="email" name="guest_email" id="{{ form.guest_email.id_for_label }}"
+                           class="form-control{% if form.guest_email.errors %} error{% endif %}"
+                           value="{{ form.guest_email.value|default:'' }}" placeholder="Optional">
+                    {% for e in form.guest_email.errors %}<span class="field-error">{{ e }}</span>{% endfor %}
+                </div>
+
+                <hr class="form-divider">
+
+                <!-- Patient type -->
+                <div class="form-group">
+                    <label>{{ form.patient_type.label }}</label>
+                    <div class="radio-group">
+                        {% for choice in form.patient_type %}
+                        <label class="radio-option">
+                            {{ choice.tag }}
+                            <span>{{ choice.choice_label }}</span>
+                        </label>
+                        {% endfor %}
+                    </div>
+                    {% for e in form.patient_type.errors %}<span class="field-error">{{ e }}</span>{% endfor %}
+                </div>
+
+                <!-- Consultation mode -->
+                <div class="form-group">
+                    <label>{{ form.consultation_mode.label }}</label>
+                    <div class="radio-group">
+                        {% for choice in form.consultation_mode %}
+                        <label class="radio-option">
+                            {{ choice.tag }}
+                            <span>{{ choice.choice_label }}</span>
+                        </label>
+                        {% endfor %}
+                    </div>
+                    {% for e in form.consultation_mode.errors %}<span class="field-error">{{ e }}</span>{% endfor %}
+                </div>
+
+                <hr class="form-divider">
+
+                <!-- Date -->
+                <div class="form-group">
+                    <label for="{{ form.appointment_date.id_for_label }}">{{ form.appointment_date.label }}</label>
+                    {{ form.appointment_date }}
+                    {% for e in form.appointment_date.errors %}<span class="field-error">{{ e }}</span>{% endfor %}
+                </div>
+
+                <!-- Time slot -->
+                <div class="form-group">
+                    <label for="{{ form.appointment_time.id_for_label }}">{{ form.appointment_time.label }}</label>
+                    {{ form.appointment_time }}
+                    <span id="slot-loading">Loading available slots&hellip;</span>
+                    <span id="no-slots-msg">No slots available for the selected date. Please try another date.</span>
+                    {% for e in form.appointment_time.errors %}<span class="field-error">{{ e }}</span>{% endfor %}
+                </div>
+
+                <button type="submit" class="btn btn-gold btn-block btn-lg mt-3">Confirm Booking</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+document.querySelectorAll('#id_appointment_date, #id_appointment_time').forEach(el => {
+    el.classList.add('form-control');
+});
+</script>
+{% endblock %}
+{% endblock %}

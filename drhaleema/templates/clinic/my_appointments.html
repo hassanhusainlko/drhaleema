@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}My Appointments — Dr. Haleema Tul Husna{% endblock %}
+
+{% block content %}
+<div class="section">
+    <div class="container">
+        <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem; margin-bottom:2rem;">
+            <div>
+                <h1 style="font-size:1.5rem; font-weight:700; color:var(--teal-dark);">My Appointments</h1>
+                <p style="color:var(--text-light); font-size:0.9rem;">{{ user.get_full_name|default:user.username }}</p>
+            </div>
+            <a href="{% url 'clinic:book' %}" class="btn btn-primary">+ Book New Appointment</a>
+        </div>
+
+        {% if appointments %}
+        <div class="appt-list">
+            {% for appt in appointments %}
+            <div class="appt-card">
+                <div class="appt-date-block">
+                    <div class="day">{{ appt.appointment_date|date:"d" }}</div>
+                    <div class="mon">{{ appt.appointment_date|date:"M" }}</div>
+                </div>
+                <div class="appt-info">
+                    <h4>{{ appt.get_consultation_mode_display }}</h4>
+                    <p>{{ appt.appointment_time|time:"h:i A" }} &nbsp;·&nbsp; {{ appt.appointment_date|date:"Y" }}</p>
+                </div>
+                <div class="appt-actions">
+                    <span class="badge badge-{{ appt.status }}">{{ appt.get_status_display }}</span>
+                    <a href="{% url 'clinic:appointment_detail' appt.pk %}" class="btn btn-outline btn-sm">View</a>
+                    {% if appt.status != 'completed' and appt.status != 'cancelled' %}
+                    <form method="post" action="{% url 'clinic:appointment_cancel' appt.pk %}" onsubmit="return confirm('Cancel this appointment?')">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger btn-sm">Cancel</button>
+                    </form>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <div style="font-size:3rem;">📅</div>
+            <p>You have no appointments yet.</p>
+            <a href="{% url 'clinic:book' %}" class="btn btn-primary mt-2">Book Your First Appointment</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

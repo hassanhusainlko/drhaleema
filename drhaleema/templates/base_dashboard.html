@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="dashboard-wrapper">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <p class="sidebar-title">Overview</p>
+        <ul class="sidebar-nav">
+            <li><a href="{% url 'clinic:dashboard' %}" {% if request.resolver_match.url_name == 'dashboard' %}class="active"{% endif %}>&#9635; Dashboard</a></li>
+        </ul>
+        <p class="sidebar-title">Appointments</p>
+        <ul class="sidebar-nav">
+            <li><a href="{% url 'clinic:dashboard_list' %}" {% if 'dashboard_list' in request.resolver_match.url_name or 'dashboard_detail' in request.resolver_match.url_name %}class="active"{% endif %}>&#128197; All Appointments</a></li>
+        </ul>
+        <p class="sidebar-title">Settings</p>
+        <ul class="sidebar-nav">
+            <li><a href="{% url 'clinic:dashboard_blocked' %}" {% if request.resolver_match.url_name == 'dashboard_blocked' %}class="active"{% endif %}>&#128683; Blocked Dates</a></li>
+            <li><a href="/admin/">&#9881; Clinic Admin</a></li>
+        </ul>
+    </aside>
+
+    <!-- Main content -->
+    <div class="dashboard-main">
+
+        <!-- Banner -->
+        <div class="dashboard-banner">
+            <div class="dashboard-banner-left">
+                <h2>🌿 Dr. Haleema Tul Husna</h2>
+                <p>Consultant Unani Physician &nbsp;·&nbsp; BUMS &nbsp;·&nbsp; Clinic Administration</p>
+            </div>
+            <div class="dashboard-banner-right">
+                <span class="dashboard-banner-date" id="dashDate"></span>
+                <span class="dashboard-banner-page">
+                    {% block banner_label %}Staff Dashboard{% endblock %}
+                </span>
+            </div>
+        </div>
+
+        <div class="dashboard-inner">
+            {% block dashboard_content %}{% endblock %}
+        </div>
+
+    </div>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+(function () {
+    const el = document.getElementById('dashDate');
+    if (!el) return;
+    const now = new Date();
+    const opts = { weekday: 'short', day: 'numeric', month: 'long', year: 'numeric' };
+    el.textContent = '📅 ' + now.toLocaleDateString('en-GB', opts);
+}());
+</script>
+{% endblock %}

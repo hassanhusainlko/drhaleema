@@ -1,0 +1,94 @@
+{% extends "base_dashboard.html" %}
+
+{% block title %}All Appointments — Dr. Haleema Clinic{% endblock %}
+
+{% block dashboard_content %}
+<div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:1.5rem; flex-wrap:wrap; gap:1rem;">
+    <h1 style="font-size:1.4rem; font-weight:700; color:var(--teal-dark);">All Appointments</h1>
+</div>
+
+<!-- Filters -->
+<form method="get" class="filter-bar">
+    <div class="filter-group">
+        <label>Date</label>
+        <input type="date" name="date" value="{{ filter_date }}">
+    </div>
+    <div class="filter-group">
+        <label>Status</label>
+        <select name="status">
+            <option value="">All</option>
+            {% for val, label in status_choices %}
+            <option value="{{ val }}" {% if filter_status == val %}selected{% endif %}>{{ label }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="filter-group">
+        <label>Mode</label>
+        <select name="mode">
+            <option value="">All</option>
+            <option value="clinic" {% if filter_mode == 'clinic' %}selected{% endif %}>Clinic Visit</option>
+            <option value="oncall" {% if filter_mode == 'oncall' %}selected{% endif %}>On-Call</option>
+        </select>
+    </div>
+    <div style="align-self:flex-end;">
+        <button type="submit" class="btn btn-primary btn-sm">Filter</button>
+        <a href="{% url 'clinic:dashboard_list' %}" class="btn btn-outline btn-sm">Reset</a>
+    </div>
+</form>
+
+<!-- Table -->
+{% if appointments %}
+<div class="data-table-wrap">
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Patient</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Mode</th>
+                <th>Type</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for appt in appointments %}
+            <tr>
+                <td>{{ appt.pk }}</td>
+                <td>{{ appt.display_name }}<br><small style="color:var(--text-light);">{{ appt.display_phone }}</small></td>
+                <td>{{ appt.appointment_date|date:"d M Y" }}</td>
+                <td>{{ appt.appointment_time|time:"h:i A" }}</td>
+                <td>{{ appt.get_consultation_mode_display }}</td>
+                <td>{{ appt.get_patient_type_display }}</td>
+                <td><span class="badge badge-{{ appt.status }}">{{ appt.get_status_display }}</span></td>
+                <td><a href="{% url 'clinic:dashboard_detail' appt.pk %}" class="btn btn-outline btn-sm">Manage</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Pagination -->
+{% if is_paginated %}
+<div class="pagination">
+    {% if page_obj.has_previous %}
+    <a href="?page={{ page_obj.previous_page_number }}&status={{ filter_status }}&date={{ filter_date }}&mode={{ filter_mode }}" class="page-link">&#8592;</a>
+    {% endif %}
+    {% for num in page_obj.paginator.page_range %}
+    <a href="?page={{ num }}&status={{ filter_status }}&date={{ filter_date }}&mode={{ filter_mode }}"
+       class="page-link {% if num == page_obj.number %}active{% endif %}">{{ num }}</a>
+    {% endfor %}
+    {% if page_obj.has_next %}
+    <a href="?page={{ page_obj.next_page_number }}&status={{ filter_status }}&date={{ filter_date }}&mode={{ filter_mode }}" class="page-link">&#8594;</a>
+    {% endif %}
+</div>
+{% endif %}
+
+{% else %}
+<div class="empty-state">
+    <div style="font-size:2.5rem;">📋</div>
+    <p>No appointments found.</p>
+</div>
+{% endif %}
+{% endblock %}

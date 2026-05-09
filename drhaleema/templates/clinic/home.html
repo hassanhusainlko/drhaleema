@@ -1,0 +1,249 @@
+{% extends "base.html" %} {% block title %}Dr. Haleema Tul Husna — Unani
+Physician & Holistic Wellness{% endblock %} {% block content %}
+
+<!-- Hero -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-badge">Unani Medicine · Traditional Healing</div>
+    <h1>Dr. Haleema Tul Husna</h1>
+    <p class="hero-qualification">Consultant Unani Physician · BUMS</p>
+    <p class="hero-tagline">
+      Chronic Disease Management &nbsp;|&nbsp; Women's Health &nbsp;|&nbsp;
+      Holistic Wellness
+    </p>
+    <div class="hero-actions">
+      <a href="{% url 'clinic:book_guest' %}" class="btn btn-gold btn-lg"
+        >Book Appointment</a
+      >
+      {% if not user.is_authenticated %}
+      <a href="{% url 'accounts:login' %}" class="btn btn-outline-white btn-lg"
+        >Patient Login</a
+      >
+      {% else %}
+      <a
+        href="{% url 'clinic:my_appointments' %}"
+        class="btn btn-outline-white btn-lg"
+        >My Appointments</a
+      >
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<!-- Quick intro -->
+<section class="section">
+  <div class="container">
+    <div style="max-width: 760px; margin: 0 auto; text-align: center">
+      <p
+        style="color: var(--text-light); line-height: 1.85; font-size: 0.97rem"
+      >
+        Dr. Haleema Tul Husna is a dedicated Unani physician specialising in the
+        holistic management of chronic and lifestyle-related conditions —
+        integrating traditional healing principles with a patient-centric
+        approach to address the root causes of illness.
+      </p>
+      <div
+        style="
+          display: flex;
+          gap: 1rem;
+          justify-content: center;
+          flex-wrap: wrap;
+          margin-top: 1.5rem;
+        "
+      >
+        <a href="{% url 'clinic:about' %}" class="btn btn-outline"
+          >About the Doctor</a
+        >
+        <a href="{% url 'clinic:expertise' %}" class="btn btn-outline"
+          >Areas of Expertise</a
+        >
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Core Specialisations slider -->
+{% if core_specs %}
+<section class="section section-alt">
+  <div class="container">
+    <h2 class="section-title">Core Specialisations</h2>
+    <p class="section-subtitle">
+      Expert Unani care across a range of chronic and lifestyle-related
+      conditions
+    </p>
+
+    <div class="mc-carousel-wrapper" data-carousel="coreSpecs">
+      <div class="mc-track-outer">
+        <div class="mc-track" id="coreSpecsTrack">
+          {% for spec in core_specs %}
+          <div class="mc-slide">
+            <div class="spec-card" style="height: 100%">
+              <div class="spec-icon">{{ spec.icon }}</div>
+              <div>
+                <h4>{{ spec.title }}</h4>
+                <p>{{ spec.description }}</p>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      <button class="mc-btn mc-btn-prev" aria-label="Previous">&#8592;</button>
+      <button class="mc-btn mc-btn-next" aria-label="Next">&#8594;</button>
+    </div>
+    <div class="carousel-dots" id="coreSpecsDots"></div>
+
+    <div style="text-align: center; margin-top: 2rem">
+      <a href="{% url 'clinic:expertise' %}" class="btn btn-outline"
+        >View Full Expertise &rarr;</a
+      >
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- Testimonials -->
+{% if testimonials %}
+<section class="testimonials-section">
+  <div class="container">
+    <h2 class="section-title" style="text-align: center">
+      What Our Patients Say
+    </h2>
+    <p class="section-subtitle" style="text-align: center">
+      Real experiences from patients who chose holistic healing
+    </p>
+
+    <div class="carousel-wrapper">
+      <div class="carousel-track-outer">
+        <div class="carousel-track" id="testimonialTrack">
+          {% for t in testimonials %}
+          <div class="testimonial-slide">
+            <div class="testimonial-card">
+              <div class="testimonial-stars">
+                {% for _ in t.star_range %}
+                <span>&#9733;</span>
+                {% endfor %} {% for _ in t.empty_star_range %}
+                <span style="color: var(--border)">&#9733;</span>
+                {% endfor %}
+              </div>
+              <p class="testimonial-text">&ldquo;{{ t.text }}&rdquo;</p>
+              <button class="testimonial-read-more" type="button">
+                Read more
+              </button>
+              <div class="testimonial-author">
+                <div class="testimonial-avatar">{{ t.avatar }}</div>
+                <div class="testimonial-author-info">
+                  <div class="testimonial-author-name">{{ t.name }}</div>
+                  <div class="testimonial-author-meta">{{ t.condition }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      <button
+        class="carousel-btn carousel-btn-prev"
+        id="testimonialPrev"
+        aria-label="Previous"
+      >
+        &#8592;
+      </button>
+      <button
+        class="carousel-btn carousel-btn-next"
+        id="testimonialNext"
+        aria-label="Next"
+      >
+        &#8594;
+      </button>
+    </div>
+    <div class="carousel-dots" id="testimonialDots"></div>
+    <div style="text-align: center; margin-top: 1.8rem">
+      <a
+        href="https://www.google.com/search?sca_esv=1432227f7e5641c8&rlz=1C1ONGR_enIN1076IN1076&biw=1366&bih=633&sxsrf=ANbL-n5IMA-wDi3p5ikh1r_LySkpFELHBw:1777887548557&si=AL3DRZFIhG6pAqfNLal55wUTwygCG0fClF3UxiOmgw9Hq7nbWb6zyc20-pNkd6gmFtjl8JMQwNpIZrDmPJJCvkKRSmjasdU31E_k7ZrW--bdSgrpAJxt9Bf_x3hpRoVYkWwqsAmedrmcptFmQi9U8Uf5tILj2u50OQ%3D%3D&q=HAMDARD+WELLNESS+-+PATNA+Reviews&sa=X&ved=2ahUKEwi-56Ceq5-UAxVVXmwGHaPsC_IQ0bkNegQIJRAH"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="btn btn-outline"
+        >See All Reviews &rarr;</a
+      >
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- OPD Hours -->
+<section class="section section-teal">
+  <div class="container">
+    <h2 class="section-title">OPD Hours</h2>
+    <p class="section-subtitle">
+      Walk-in and appointment-based consultations available
+    </p>
+    <div class="opd-grid">
+      <div class="opd-card">
+        <div class="opd-label">Morning Session</div>
+        <div class="opd-time">10:00 AM – 2:00 PM</div>
+      </div>
+      <div class="opd-card">
+        <div class="opd-label">Evening Session</div>
+        <div class="opd-time">2:30 PM – 6:30 PM</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- How to Book -->
+<section class="section section-alt">
+  <div class="container">
+    <h2 class="section-title" style="text-align: center">How to Book</h2>
+    <p class="section-subtitle" style="text-align: center">
+      Simple, quick — no registration required for guest booking
+    </p>
+    <div class="steps-grid">
+      <div class="step">
+        <div class="step-num">1</div>
+        <h4>Choose a Date</h4>
+        <p>Select any available date within OPD hours</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h4>Pick a Time Slot</h4>
+        <p>Available slots are shown in real time</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h4>Confirm Booking</h4>
+        <p>Submit your details and receive instant confirmation</p>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <h4>Attend Consultation</h4>
+        <p>Visit the clinic or join on-call at your scheduled time</p>
+      </div>
+    </div>
+    <div
+      style="
+        text-align: center;
+        margin-top: 2.5rem;
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+      "
+    >
+      <a href="{% url 'clinic:book_guest' %}" class="btn btn-gold btn-lg"
+        >Book as Guest</a
+      >
+      {% if user.is_authenticated %}
+      <a href="{% url 'clinic:book' %}" class="btn btn-primary btn-lg"
+        >Book with My Account</a
+      >
+      {% else %}
+      <a href="{% url 'accounts:register' %}" class="btn btn-outline btn-lg"
+        >Create Account</a
+      >
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% endblock %}

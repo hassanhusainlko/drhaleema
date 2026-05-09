@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}Appointment #{{ appointment.pk }} — Dr. Haleema Tul Husna{% endblock %}
+
+{% block content %}
+<div class="section">
+    <div class="container-sm">
+        <div style="margin-bottom:1.5rem;">
+            <a href="{% url 'clinic:my_appointments' %}" style="font-size:0.88rem; color:var(--teal);">&#8592; Back to Appointments</a>
+        </div>
+
+        <div class="card mb-3">
+            <div class="card-header" style="display:flex; align-items:center; justify-content:space-between;">
+                <span>Appointment #{{ appointment.pk }}</span>
+                <span class="badge badge-{{ appointment.status }}">{{ appointment.get_status_display }}</span>
+            </div>
+            <div class="card-body">
+                <dl style="display:grid; grid-template-columns:auto 1fr; gap:0.5rem 1.5rem; font-size:0.9rem;">
+                    <dt style="color:var(--text-light);">Date</dt>
+                    <dd>{{ appointment.appointment_date|date:"l, d F Y" }}</dd>
+
+                    <dt style="color:var(--text-light);">Time</dt>
+                    <dd>{{ appointment.appointment_time|time:"h:i A" }}</dd>
+
+                    <dt style="color:var(--text-light);">Type</dt>
+                    <dd>{{ appointment.get_consultation_mode_display }}</dd>
+
+                    <dt style="color:var(--text-light);">Booked</dt>
+                    <dd>{{ appointment.created_at|date:"d M Y, h:i A" }}</dd>
+                </dl>
+
+                {% if appointment.status != 'completed' and appointment.status != 'cancelled' %}
+                <div style="margin-top:1.5rem;">
+                    <form method="post" action="{% url 'clinic:appointment_cancel' appointment.pk %}" onsubmit="return confirm('Are you sure you want to cancel this appointment?')">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger btn-sm">Cancel Appointment</button>
+                    </form>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        {% if appointment.consultation_notes or appointment.prescription %}
+        <div class="card">
+            <div class="card-header">Consultation Notes</div>
+            <div class="card-body">
+                {% if appointment.consultation_notes %}
+                <p style="font-size:0.9rem; font-weight:600; margin-bottom:0.3rem;">Notes</p>
+                <p style="font-size:0.88rem; color:var(--text); white-space:pre-line;">{{ appointment.consultation_notes }}</p>
+                {% endif %}
+                {% if appointment.prescription %}
+                <p style="font-size:0.9rem; font-weight:600; margin-top:1rem; margin-bottom:0.3rem;">Prescription</p>
+                <p style="font-size:0.88rem; color:var(--text); white-space:pre-line;">{{ appointment.prescription }}</p>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

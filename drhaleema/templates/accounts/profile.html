@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}My Profile — Dr. Haleema Tul Husna{% endblock %}
+
+{% block content %}
+<div class="section">
+    <div class="container">
+
+        <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem; margin-bottom:2rem;">
+            <div>
+                <h1 style="font-size:1.5rem; font-weight:700; color:var(--teal-dark);">My Profile</h1>
+                <p style="color:var(--text-light); font-size:0.9rem;">{{ profile_user.get_full_name|default:profile_user.username }}</p>
+            </div>
+            <div style="display:flex; gap:0.8rem; flex-wrap:wrap;">
+                <a href="{% url 'accounts:profile_edit' %}" class="btn btn-outline btn-sm">Edit Profile</a>
+                <a href="{% url 'accounts:password_change' %}" class="btn btn-outline btn-sm">Change Password</a>
+            </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 2fr; gap:1.5rem; align-items:start;">
+
+            <!-- Profile card -->
+            <div class="card">
+                <div class="card-body">
+                    <div style="text-align:center; margin-bottom:1.2rem;">
+                        <div style="width:72px;height:72px;background:var(--teal-light);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2rem;margin:0 auto 0.8rem;">👤</div>
+                        <h3 style="font-size:1rem; font-weight:700;">{{ profile_user.get_full_name|default:profile_user.username }}</h3>
+                        <p style="font-size:0.82rem; color:var(--text-light);">{{ profile_user.email }}</p>
+                    </div>
+                    <dl style="font-size:0.85rem;">
+                        {% if profile_user.phone_number %}
+                        <dt style="color:var(--text-light);">Phone</dt>
+                        <dd style="font-weight:500; margin-bottom:0.5rem;">{{ profile_user.phone_number }}</dd>
+                        {% endif %}
+                        {% if profile_user.gender %}
+                        <dt style="color:var(--text-light);">Gender</dt>
+                        <dd style="font-weight:500; margin-bottom:0.5rem;">{{ profile_user.get_gender_display }}</dd>
+                        {% endif %}
+                        {% if profile_user.date_of_birth %}
+                        <dt style="color:var(--text-light);">Date of Birth</dt>
+                        <dd style="font-weight:500; margin-bottom:0.5rem;">{{ profile_user.date_of_birth|date:"d M Y" }}</dd>
+                        {% endif %}
+                        <dt style="color:var(--text-light);">Member Since</dt>
+                        <dd style="font-weight:500;">{{ profile_user.date_joined|date:"M Y" }}</dd>
+                    </dl>
+                </div>
+            </div>
+
+            <!-- Appointments -->
+            <div>
+                <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:1rem;">
+                    <h2 style="font-size:1.1rem; font-weight:700; color:var(--teal-dark);">Recent Appointments</h2>
+                    <a href="{% url 'clinic:my_appointments' %}" class="btn btn-outline btn-sm">View All</a>
+                </div>
+
+                {% if appointments %}
+                <div class="appt-list">
+                    {% for appt in appointments|slice:":5" %}
+                    <div class="appt-card">
+                        <div class="appt-date-block">
+                            <div class="day">{{ appt.appointment_date|date:"d" }}</div>
+                            <div class="mon">{{ appt.appointment_date|date:"M" }}</div>
+                        </div>
+                        <div class="appt-info">
+                            <h4>{{ appt.get_consultation_mode_display }}</h4>
+                            <p>{{ appt.appointment_time|time:"h:i A" }}</p>
+                        </div>
+                        <div class="appt-actions">
+                            <span class="badge badge-{{ appt.status }}">{{ appt.get_status_display }}</span>
+                            <a href="{% url 'clinic:appointment_detail' appt.pk %}" class="btn btn-outline btn-sm">View</a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="empty-state">
+                    <div style="font-size:2.5rem;">📅</div>
+                    <p>No appointments yet.</p>
+                    <a href="{% url 'clinic:book' %}" class="btn btn-primary btn-sm mt-2">Book Now</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,64 @@
+{% extends "base_dashboard.html" %}
+
+{% block title %}Dashboard — Dr. Haleema Clinic{% endblock %}
+
+{% block dashboard_content %}
+<h1 style="font-size:1.4rem; font-weight:700; color:var(--teal-dark); margin-bottom:0.3rem;">Dashboard</h1>
+<p style="color:var(--text-light); font-size:0.88rem; margin-bottom:1.5rem;">{{ today|date:"l, d F Y" }}</p>
+
+<!-- Stats -->
+<div class="stat-grid">
+    <div class="stat-card">
+        <div class="stat-num">{{ total_today }}</div>
+        <div class="stat-label">Today's Appointments</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-num" style="color:#875d0a;">{{ pending_count }}</div>
+        <div class="stat-label">Pending</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-num" style="color:var(--teal-dark);">{{ confirmed_count }}</div>
+        <div class="stat-label">Confirmed</div>
+    </div>
+</div>
+
+<!-- Today's Schedule -->
+<div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:1rem;">
+    <h2 style="font-size:1.05rem; font-weight:700; color:var(--text);">Today's Schedule</h2>
+    <a href="{% url 'clinic:dashboard_list' %}" class="btn btn-outline btn-sm">View All</a>
+</div>
+
+{% if today_appointments %}
+<div class="data-table-wrap">
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Time</th>
+                <th>Patient</th>
+                <th>Type</th>
+                <th>Mode</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for appt in today_appointments %}
+            <tr>
+                <td><strong>{{ appt.appointment_time|time:"h:i A" }}</strong></td>
+                <td>{{ appt.display_name }}{% if appt.display_phone %}<br><small style="color:var(--text-light);">{{ appt.display_phone }}</small>{% endif %}</td>
+                <td>{{ appt.get_patient_type_display }}</td>
+                <td>{{ appt.get_consultation_mode_display }}</td>
+                <td><span class="badge badge-{{ appt.status }}">{{ appt.get_status_display }}</span></td>
+                <td><a href="{% url 'clinic:dashboard_detail' appt.pk %}" class="btn btn-outline btn-sm">Manage</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="empty-state">
+    <div style="font-size:2.5rem;">📅</div>
+    <p>No appointments scheduled for today.</p>
+</div>
+{% endif %}
+{% endblock %}

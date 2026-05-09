@@ -1,0 +1,58 @@
+{% extends "base_dashboard.html" %}
+
+{% block title %}Blocked Dates — Dr. Haleema Clinic{% endblock %}
+
+{% block dashboard_content %}
+<h1 style="font-size:1.4rem; font-weight:700; color:var(--teal-dark); margin-bottom:1.5rem;">Blocked Dates</h1>
+
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; align-items:start;">
+
+    <!-- Add blocked date -->
+    <div class="detail-section">
+        <h3>Block a Date</h3>
+        <form method="post" novalidate>
+            {% csrf_token %}
+            <div class="form-group">
+                <label>Date</label>
+                <input type="date" name="date" class="form-control{% if form.date.errors %} error{% endif %}"
+                       value="{{ form.date.value|default:'' }}">
+                {% for e in form.date.errors %}<span class="field-error">{{ e }}</span>{% endfor %}
+            </div>
+            <div class="form-group">
+                <label>Reason (optional)</label>
+                <input type="text" name="reason" class="form-control"
+                       value="{{ form.reason.value|default:'' }}"
+                       placeholder="e.g. Public holiday, Leave">
+            </div>
+            <button type="submit" class="btn btn-primary">Block Date</button>
+        </form>
+    </div>
+
+    <!-- Upcoming blocked dates -->
+    <div class="detail-section">
+        <h3>Upcoming Blocked Dates</h3>
+        {% if blocked_dates %}
+        <ul style="list-style:none; display:flex; flex-direction:column; gap:0.6rem;">
+            {% for bd in blocked_dates %}
+            <li style="display:flex; align-items:center; justify-content:space-between; gap:1rem; padding:0.6rem; background:var(--cream); border-radius:var(--radius-sm);">
+                <div>
+                    <strong style="font-size:0.9rem;">{{ bd.date|date:"d M Y" }}</strong>
+                    {% if bd.reason %}
+                    <span style="font-size:0.8rem; color:var(--text-light);"> — {{ bd.reason }}</span>
+                    {% endif %}
+                </div>
+                <form method="post" action="{% url 'clinic:dashboard_blocked_delete' bd.pk %}"
+                      onsubmit="return confirm('Unblock {{ bd.date }}?')">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger btn-sm">Unblock</button>
+                </form>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p style="font-size:0.88rem; color:var(--text-muted);">No upcoming blocked dates.</p>
+        {% endif %}
+    </div>
+
+</div>
+{% endblock %}

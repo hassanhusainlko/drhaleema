@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}Book Appointment — Dr. Haleema Tul Husna{% endblock %}
+
+{% block content %}
+<div class="form-page">
+    <div class="container-sm">
+        <div class="form-card">
+            <h1 class="form-title">Book an Appointment</h1>
+            <p class="form-subtitle">
+                Booking as <strong>{{ user.get_full_name|default:user.username }}</strong>.
+                <a href="{% url 'clinic:book_guest' %}">Book as guest instead?</a>
+            </p>
+
+            <form method="post" novalidate>
+                {% csrf_token %}
+
+                <!-- Patient type -->
+                <div class="form-group">
+                    <label>{{ form.patient_type.label }}</label>
+                    <div class="radio-group">
+                        {% for choice in form.patient_type %}
+                        <label class="radio-option">
+                            {{ choice.tag }}
+                            <span>{{ choice.choice_label }}</span>
+                        </label>
+                        {% endfor %}
+                    </div>
+                    {% if form.patient_type.errors %}
+                        {% for e in form.patient_type.errors %}<span class="field-error">{{ e }}</span>{% endfor %}
+                    {% endif %}
+                </div>
+
+                <!-- Consultation mode -->
+                <div class="form-group">
+                    <label>{{ form.consultation_mode.label }}</label>
+                    <div class="radio-group">
+                        {% for choice in form.consultation_mode %}
+                        <label class="radio-option">
+                            {{ choice.tag }}
+                            <span>{{ choice.choice_label }}</span>
+                        </label>
+                        {% endfor %}
+                    </div>
+                    {% if form.consultation_mode.errors %}
+                        {% for e in form.consultation_mode.errors %}<span class="field-error">{{ e }}</span>{% endfor %}
+                    {% endif %}
+                </div>
+
+                <hr class="form-divider">
+
+                <!-- Date -->
+                <div class="form-group">
+                    <label for="{{ form.appointment_date.id_for_label }}">{{ form.appointment_date.label }}</label>
+                    {{ form.appointment_date }}
+                    {% if form.appointment_date.errors %}
+                        {% for e in form.appointment_date.errors %}<span class="field-error">{{ e }}</span>{% endfor %}
+                    {% endif %}
+                </div>
+
+                <!-- Time slot -->
+                <div class="form-group">
+                    <label for="{{ form.appointment_time.id_for_label }}">{{ form.appointment_time.label }}</label>
+                    {{ form.appointment_time }}
+                    <span id="slot-loading">Loading available slots&hellip;</span>
+                    <span id="no-slots-msg">No slots available for the selected date. Please try another date.</span>
+                    {% if form.appointment_time.errors %}
+                        {% for e in form.appointment_time.errors %}<span class="field-error">{{ e }}</span>{% endfor %}
+                    {% endif %}
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block btn-lg mt-3">Confirm Booking</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+// Apply form-control class to rendered inputs
+document.querySelectorAll('#id_appointment_date, #id_appointment_time').forEach(el => {
+    el.classList.add('form-control');
+});
+</script>
+{% endblock %}
+{% endblock %}

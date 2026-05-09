@@ -1,0 +1,210 @@
+{% extends "admin/base.html" %}
+{% load i18n %}
+
+{% block branding %}
+<h1 id="site-name">
+    <a href="{% url 'admin:index' %}">🌿 Dr. Haleema Clinic</a>
+</h1>
+{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+/* ── Purple palette overrides for Django admin ── */
+:root {
+    --primary:            #7c3aed;
+    --secondary:          #5b21b6;
+    --accent:             #e8b86d;
+    --primary-fg:         #fff;
+
+    --header-color:       #f0e6ff;
+    --header-branding-color: #e8b86d;
+    --header-bg:          #5b21b6;
+    --header-link-color:  rgba(255,255,255,0.92);
+
+    --breadcrumbs-fg:     #ddd6fe;
+    --breadcrumbs-link-fg:#fff;
+    --breadcrumbs-bg:     #7c3aed;
+
+    --link-fg:            #7c3aed;
+    --link-hover-color:   #5b21b6;
+    --link-selected-fg:   #6d28d9;
+
+    --object-tools-bg:    #7c3aed;
+    --object-tools-hover-bg: #5b21b6;
+
+    --nav-sidebar-bg:     #faf9ff;
+    --hair-line-color:    #ddd6fe;
+}
+
+/* Header gradient */
+#header {
+    background: linear-gradient(135deg, #3b0764 0%, #5b21b6 50%, #7c3aed 100%) !important;
+    box-shadow: 0 2px 12px rgba(91,33,182,0.30);
+    padding: 12px 20px;
+}
+
+#site-name a,
+#site-name a:visited,
+#user-tools a,
+#user-tools a:visited {
+    color: rgba(255,255,255,0.92);
+}
+
+#user-tools {
+    color: rgba(255,255,255,0.75);
+}
+
+/* Breadcrumbs */
+div.breadcrumbs {
+    background: #7c3aed;
+    color: #ede9fe;
+    padding: 10px 20px;
+}
+div.breadcrumbs a,
+div.breadcrumbs a:visited { color: #fff; }
+div.breadcrumbs a:hover   { color: #e8b86d; }
+
+/* Module / section headings */
+.module h2,
+.module caption,
+.inline-group h2,
+thead th {
+    background: #7c3aed !important;
+    color: #fff !important;
+}
+
+/* Sort links inside table headers */
+thead th a,
+thead th a:link,
+thead th a:visited,
+thead th a:hover,
+thead th a:focus,
+thead th .text a,
+thead th .text span,
+thead th span.sortedASC,
+thead th span.sortedDESC {
+    color: #fff !important;
+    opacity: 1 !important;
+}
+
+thead th.sorted { background: #5b21b6 !important; }
+
+/* Sort arrow indicator */
+thead th.ascending .text::after,
+thead th.descending .text::after {
+    color: #e8b86d !important;
+}
+
+/* Buttons */
+.button,
+input[type="submit"],
+input[type="button"],
+.submit-row input,
+a.button {
+    background: #7c3aed;
+    color: #fff;
+    border: 1px solid #6d28d9;
+    border-radius: 4px;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.button:hover,
+input[type="submit"]:hover,
+input[type="button"]:hover,
+.submit-row input:hover,
+a.button:hover {
+    background: #5b21b6;
+    border-color: #4c1d95;
+}
+
+.button.default,
+input[type="submit"].default {
+    background: #5b21b6;
+    border-color: #4c1d95;
+}
+
+.deletelink {
+    background: #e74c3c !important;
+    border-color: #c0392b !important;
+}
+
+/* Object tools (Add, History buttons top right) */
+ul.object-tools li a {
+    background: #7c3aed;
+    border-radius: 15px;
+}
+ul.object-tools li a:hover    { background: #5b21b6; }
+ul.object-tools li a.viewsitelink { background: #5b21b6; }
+
+/* Changelist action buttons */
+.actions select,
+.actions button {
+    border-color: #7c3aed;
+    color: #5b21b6;
+}
+.actions button {
+    background: #7c3aed;
+    color: #fff;
+    border-color: #5b21b6;
+}
+
+/* Links throughout */
+a, a:visited          { color: #7c3aed; }
+a:hover               { color: #5b21b6; }
+a:focus               { color: #5b21b6; }
+
+/* Selected rows in changelist */
+tr.selected td        { background-color: #f5f3ff; }
+tr:hover td           { background-color: #faf9ff; }
+
+/* Dashboard app/model labels */
+.app-clinic     .module h2 { background: #6d28d9 !important; }
+.app-accounts   .module h2 { background: #7c3aed !important; }
+.app-auth       .module h2 { background: #8b5cf6 !important; }
+
+/* Recent actions panel */
+#recent-actions-list li a { color: #7c3aed; }
+
+/* Nav sidebar toggle */
+#nav-sidebar { border-right: 1px solid #ddd6fe; }
+.toggle-nav-sidebar { background: none; border-color: #ddd6fe; }
+.toggle-nav-sidebar:hover { background: #ede9fe; }
+
+/* Pagination */
+.paginator a, .paginator .this-page { color: #7c3aed; }
+
+/* Filter sidebar */
+#changelist-filter h2       { background: #5b21b6; color: #fff; }
+#changelist-filter h3       { color: #5b21b6; border-bottom: 1px solid #ddd6fe; }
+#changelist-filter li.selected a { color: #7c3aed; font-weight: 700; }
+
+/* Date hierarchy */
+.xfull { border-bottom: 1px solid #ddd6fe; }
+.date-hierarchy a { color: #7c3aed; }
+
+/* Calender widget */
+.calendarbox h2 { background: #7c3aed; color: #fff; }
+.calendar td a  { color: #7c3aed; }
+.calendar td a:hover,
+.timelist a:hover { background: #ede9fe; }
+
+/* Inline fieldset */
+.inline-group .tabular td.original p { color: #5b21b6; }
+
+/* Error list */
+ul.errorlist li { background: #fce7f3; color: #be185d; }
+
+/* Help text */
+.help { color: #7c6e9a; }
+
+/* Form focus */
+input:focus, select:focus, textarea:focus {
+    outline-color: #7c3aed;
+    border-color: #a78bfa;
+    box-shadow: 0 0 0 3px rgba(124,58,237,0.12);
+}
+</style>
+{% endblock %}

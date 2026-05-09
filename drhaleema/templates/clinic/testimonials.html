@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}Patient Reviews — Dr. Haleema Tul Husna{% endblock %}
+
+{% block content %}
+
+<section class="hero" style="padding:3.5rem 1.5rem;">
+    <div class="container">
+        <div class="hero-badge">Patient Reviews</div>
+        <h1>What Our Patients Say</h1>
+        <p class="hero-qualification">Dr. Haleema Tul Husna · BUMS</p>
+        <p class="hero-tagline">Real experiences from patients who chose holistic Unani healing</p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+
+        {% if testimonials %}
+        <div class="all-reviews-grid">
+            {% for t in testimonials %}
+            <div class="testimonial-card all-review-card">
+                <div class="testimonial-stars">
+                    {% for _ in t.star_range %}
+                    <span>&#9733;</span>
+                    {% endfor %}
+                    {% for _ in t.empty_star_range %}
+                    <span style="color:var(--border);">&#9733;</span>
+                    {% endfor %}
+                </div>
+                <p class="testimonial-text">&ldquo;{{ t.text }}&rdquo;</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">{{ t.avatar }}</div>
+                    <div class="testimonial-author-info">
+                        <div class="testimonial-author-name">{{ t.name }}</div>
+                        <div class="testimonial-author-meta">{{ t.condition }}</div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p style="text-align:center; color:var(--text-muted); padding:3rem 0;">No reviews yet.</p>
+        {% endif %}
+
+        <div style="text-align:center; margin-top:3rem;">
+            <a href="{% url 'clinic:book_guest' %}" class="btn btn-gold btn-lg">Book a Consultation</a>
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}

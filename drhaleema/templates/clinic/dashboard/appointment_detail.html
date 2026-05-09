@@ -1,0 +1,85 @@
+{% extends "base_dashboard.html" %}
+
+{% block title %}Appointment #{{ appointment.pk }} — Dr. Haleema Clinic{% endblock %}
+
+{% block dashboard_content %}
+<div style="margin-bottom:1rem;">
+    <a href="{% url 'clinic:dashboard_list' %}" style="font-size:0.88rem; color:var(--teal);">&#8592; Back to Appointments</a>
+</div>
+
+<div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem; margin-bottom:1.5rem;">
+    <h1 style="font-size:1.3rem; font-weight:700; color:var(--teal-dark);">
+        Appointment #{{ appointment.pk }}
+    </h1>
+    <span id="status-badge" class="badge badge-{{ appointment.status }}">{{ appointment.get_status_display }}</span>
+</div>
+
+<div class="detail-grid">
+
+    <!-- Patient Info -->
+    <div class="detail-section">
+        <h3>Patient Details</h3>
+        <div class="detail-row"><dt>Name</dt><dd>{{ appointment.display_name }}</dd></div>
+        <div class="detail-row"><dt>Phone</dt><dd>{{ appointment.display_phone|default:"—" }}</dd></div>
+        {% if appointment.guest_email %}
+        <div class="detail-row"><dt>Email</dt><dd>{{ appointment.guest_email }}</dd></div>
+        {% elif appointment.patient and appointment.patient.email %}
+        <div class="detail-row"><dt>Email</dt><dd>{{ appointment.patient.email }}</dd></div>
+        {% endif %}
+        <div class="detail-row"><dt>Patient Type</dt><dd>{{ appointment.get_patient_type_display }}</dd></div>
+        <div class="detail-row"><dt>Booked</dt><dd>{{ appointment.created_at|date:"d M Y, h:i A" }}</dd></div>
+    </div>
+
+    <!-- Appointment Info -->
+    <div class="detail-section">
+        <h3>Appointment Details</h3>
+        <div class="detail-row"><dt>Date</dt><dd>{{ appointment.appointment_date|date:"l, d F Y" }}</dd></div>
+        <div class="detail-row"><dt>Time</dt><dd>{{ appointment.appointment_time|time:"h:i A" }}</dd></div>
+        <div class="detail-row"><dt>Mode</dt><dd>{{ appointment.get_consultation_mode_display }}</dd></div>
+        <div class="detail-row"><dt>Status</dt><dd><span class="badge badge-{{ appointment.status }}">{{ appointment.get_status_display }}</span></dd></div>
+
+        <!-- Status change form -->
+        <hr style="border:none;border-top:1px solid var(--border);margin:1rem 0;">
+        <h4 style="font-size:0.88rem; font-weight:600; margin-bottom:0.6rem;">Update Status</h4>
+        <form id="status-form" data-url="{% url 'clinic:dashboard_status' appointment.pk %}" style="display:flex; gap:0.6rem; align-items:center; flex-wrap:wrap;">
+            {% csrf_token %}
+            <select name="status" class="form-control" style="width:auto; min-width:140px;">
+                {% for val, label in status_form.fields.status.choices %}
+                <option value="{{ val }}" {% if appointment.status == val %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit" class="btn btn-primary btn-sm">Update</button>
+            <span id="status-msg" class="field-error" style="display:none;"></span>
+        </form>
+    </div>
+
+    <!-- Consultation Notes -->
+    <div class="detail-section" style="grid-column:1/-1;">
+        <h3>Consultation Notes &amp; Prescription</h3>
+        <form id="notes-form" data-url="{% url 'clinic:dashboard_notes' appointment.pk %}">
+            {% csrf_token %}
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+                <div class="form-group">
+                    <label>Consultation Notes</label>
+                    <textarea name="consultation_notes" class="form-control" rows="6"
+                              placeholder="Consultation notes...">{{ appointment.consultation_notes }}</textarea>
+                </div>
+                <div class="form-group">
+                    <label>Prescription</label>
+                    <textarea name="prescription" class="form-control" rows="6"
+                              placeholder="Prescription details...">{{ appointment.prescription }}</textarea>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Save Notes</button>
+            <span id="notes-msg" class="field-error" style="display:none; margin-left:1rem;"></span>
+        </form>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<style>
+.field-success { color: #27ae60; font-size: 0.85rem; }
+</style>
+{% endblock %}
